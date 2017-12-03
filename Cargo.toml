@@ -1,0 +1,13 @@
+[package]
+name = "react-redux-cli"
+version = "0.1.0"
+authors = ["Taylor Stieff <tmstieff@gmail.com>"]
+
+[[bin]]
+path = "src/main.rs"
+name = "recli"
+
+[dependencies]
+argparse = "0.2.1"
+ansi_term = "0.10.2"
+glob = "0.2.11"
