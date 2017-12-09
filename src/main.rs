@@ -1,6 +1,8 @@
 extern crate argparse;
-extern crate ansi_term;
 extern crate glob;
+
+use std::io::{self, Write};
+use std::process::exit;
 
 use argparse::{ArgumentParser, StoreTrue, Store, Print};
 
@@ -32,14 +34,24 @@ fn main() {
         ap.refer(&mut output_dir)
             .add_option(&["-o", "--output"], Store, "Output directory for new source files (default './src')");
         ap.refer(&mut output_test_dir)
-            .add_option(&["-t", "--test-output"], Store, "Output directory for test source files (default './test)");
+            .add_option(&["-T", "--test-output"], Store, "Output directory for test source files (default './test)");
         ap.parse_args_or_exit();
     }
 
     if !name.eq("") {
-        let generator = ctrl::generator::Generator::new(name, verbose, dir,
-                                                        extension, component_type,
-                                                        output_dir, output_test_dir);
-        generator.run();
+        let mut generator = ctrl::generator::Generator::new(name, verbose, dir,
+                                                            extension, component_type,
+                                                            output_dir, output_test_dir);
+        let result = generator.run();
+        match result {
+            Err(e) => {
+                writeln!(io::stderr(), "{}", e).unwrap();
+                exit(1);
+            }
+            Ok(msg) => {
+                println!("{}", msg);
+                exit(0);
+            }
+        }
     }
 }

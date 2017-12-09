@@ -9,5 +9,4 @@ name = "recli"
 
 [dependencies]
 argparse = "0.2.1"
-ansi_term = "0.10.2"
 glob = "0.2.11"
